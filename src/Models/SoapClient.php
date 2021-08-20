@@ -2,25 +2,28 @@
 
 namespace Proglab\SelligentClientBundle\Models;
 
-use App\Exception\ErrorDataException;
+use Exception;
+use Proglab\SelligentClientBundle\Exception\ErrorDataException;
+use SoapClient as Soap;
+use SoapHeader;
 
 class SoapClient
 {
-    protected $client = null;
+    protected ?Soap $client = null;
 
-    protected $individual_url;
-    protected $broadcast_url;
-    protected $login;
-    protected $password;
+    protected string $individual_url;
+    protected string $broadcast_url;
+    protected string $login;
+    protected string $password;
 
-    protected $lid = '';
-    protected $filter = [];
-    protected $maxcount = 10;
-    protected $constraint = '';
+    protected string $lid = '';
+    protected array $filter = [];
+    protected int $maxcount = 10;
+    protected string $constraint = '';
 
-    protected $uid = '';
-    protected $properties = [];
-    protected $gate = '';
+    protected string $uid = '';
+    protected array $properties = [];
+    protected string $gate = '';
 
     public function __construct(string $individual_url, string $broadcast_url, string $login, string $password)
     {
@@ -30,9 +33,12 @@ class SoapClient
         $this->password = $password;
     }
 
-    protected function getHeader()
+    protected function getHeader(): SoapHeader
     {
-        return new \SoapHeader('http://tempuri.org/', 'AutomationAuthHeader', [
+        return new SoapHeader(
+            'http://tempuri.org/',
+            'AutomationAuthHeader',
+            [
                 'Login' => $this->login,
                 'Password' => $this->password,
                 'connection_timeout' => 0,
@@ -50,12 +56,12 @@ class SoapClient
         );
     }
 
-    public function getClient(): \SoapClient
+    public function getClient(): Soap
     {
         return $this->client;
     }
 
-    public function setClient(\SoapClient $client): void
+    public function setClient(Soap $client): void
     {
         $this->client = $client;
     }
@@ -130,21 +136,21 @@ class SoapClient
         $this->gate = $gate;
     }
 
-    public function addProperty($key, $value)
+    public function addProperty(string $key, string $value): self
     {
         $this->properties[] = ['Key' => $key, 'Value' => $value];
 
         return $this;
     }
 
-    public function addFilter($key, $value)
+    public function addFilter(string $key, string $value): self
     {
         $this->filter[] = ['Key' => $key, 'Value' => $value];
 
         return $this;
     }
 
-    public function createRow($data, $listId)
+    public function createRow(array $data, int $listId)
     {
         $this->properties = [];
         if (array_key_exists('created', $data)) {
@@ -176,7 +182,7 @@ class SoapClient
         return $result;
     }
 
-    public function getOneByFilter($filters, $listId)
+    public function getOneByFilter(array $filters, int $listId)
     {
         $this->filter = [];
         $this->setLid($listId);
@@ -196,7 +202,7 @@ class SoapClient
         ]);
 
         if (isset($result->ErrorStr) && !empty($result->ErrorStr)) {
-            if ('Unable to retrieve user!' == $result->ErrorStr) {
+            if ('Unable to retrieve user!' === $result->ErrorStr) {
                 return [];
             }
 
@@ -212,7 +218,7 @@ class SoapClient
         return [];
     }
 
-    public function updateRow($data, $id, $listId)
+    public function updateRow(array $data, int $id, int $listId)
     {
         $this->properties = [];
         $this->setLid($listId);
@@ -222,8 +228,8 @@ class SoapClient
             $this->addProperty($key, $value);
         }
 
-        if ('' == $this->lid || 0 == sizeof($this->properties) || '' == $this->uid) {
-            throw new \Exception('Not all properties are set for this method.');
+        if ('' === $this->lid || '' === $this->uid || 0 === count($this->properties)) {
+            throw new Exception('Not all properties are set for this method.');
         }
 
         $result = $this->call('UpdateUser', [
@@ -239,16 +245,14 @@ class SoapClient
     {
         if (is_null($this->client)) {
             try {
-                $this->client = new \SoapClient($this->individual_url);
+                $this->client = new Soap($this->individual_url);
                 $this->client->__setSoapHeaders($this->getHeader());
-            } catch (\Exception $e) {
-                throw new \Exception('Could not connect: '.$e->getMessage());
+            } catch (Exception $e) {
+                throw new Exception('Could not connect: '.$e->getMessage());
             }
         }
-        if ($this->client) {
+        if (null !== $this->client) {
             return $this->client->{$method}($param);
-        } else {
-            throw new \Exception('SOAP Client unavailable');
         }
     }
 
