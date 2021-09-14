@@ -136,7 +136,7 @@ class SoapClient
         $this->gate = $gate;
     }
 
-    public function addProperty(string $key, string $value): self
+    public function addProperty(string $key, ?string $value): self
     {
         $this->properties[] = ['Key' => $key, 'Value' => $value];
 
