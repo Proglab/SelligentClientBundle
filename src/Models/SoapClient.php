@@ -153,19 +153,10 @@ class SoapClient
     public function createRow(array $data, int $listId)
     {
         $this->properties = [];
-        if (array_key_exists('created', $data)) {
-            $data['CREATED_DT'] = $data['created'];
-            unset($data['created']);
-        }
-
         $this->setLid($listId);
         $this->properties = [];
         foreach ($data as $key => $value) {
             $this->addProperty(strtoupper($key), $value);
-        }
-
-        if (!array_key_exists('CREATED_DT', $data) || (isset($data['CREATED_DT']) && empty($data['CREATED_DT']))) {
-            $this->addProperty('CREATED_DT', date('Y-m-d H:i:s'));
         }
 
         $result = $this->call('CreateUser', [
