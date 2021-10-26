@@ -36,4 +36,14 @@ class SelligentClient
     {
         return $this->soap_client->updateRow($data, $id, $listId);
     }
+
+    public function triggerCampaign($gate = null, $properties = [])
+    {
+        return $this->soap_client->triggerCampaign($gate, $properties);
+    }
+
+    public function triggerCampaignForUser($userId = null, $gate = null, $listId = null, $params = [])
+    {
+        return $this->soap_client->triggerCampaignForUser($userId, $gate, $listId, $params);
+    }
 }

@@ -267,4 +267,82 @@ class SoapClient
 
         return $return;
     }
+
+    public function triggerCampaign($gate = null, $properties = [])
+    {
+        if ((empty($gate) && empty($this->gate)) || (empty($properties) && empty($this->properties))) {
+            $exception = new ErrorDataException('Selligent Error on Trigger mail');
+            $exception->setDatas(['List' => $this->lid, 'Datas' => $this->properties, 'Gate' => $this->gate, 'NbrPropreties' => sizeof($this->properties)]);
+            throw $exception;
+        }
+
+        if (!empty($gate)) {
+            $this->gate = $gate;
+        }
+
+        if (!empty($properties)) {
+            $this->properties = $properties;
+        }
+
+        $input = [];
+        $input['GateName'] = $this->gate;
+        $input['InputData'] = $this->properties;
+        $result = $this->call('TriggerCampaign', $input);
+        $this->gate = '';
+        $this->properties = [];
+
+        if (isset($result->ErrorStr) && (isset($result->ID) && 0 == $result->ID)) {
+            $exception = new ErrorDataException('Selligent Error on Trigger mail : '.$result->ErrorStr);
+            $exception->setDatas(['List' => $this->lid, 'Datas' => $this->properties, 'Gate' => $this->gate, 'NbrPropreties' => sizeof($this->properties)]);
+            throw $exception;
+        }
+
+        return $result;
+    }
+
+    public function triggerCampaignForUser($userId = null, $gate = null, $listId = null, $properties = [])
+    {
+        if ((empty($gate) && empty($this->gate)) || (empty($properties) && empty($this->properties)) || (empty($userId) && empty($this->uid)) || (empty($listId) && empty($this->lid))) {
+            $exception = new ErrorDataException('Selligent Error on Trigger mail');
+            $exception->setDatas(['List' => $this->lid, 'Datas' => $this->properties, 'Gate' => $this->gate, 'UserId' => $this->uid, 'NbrPropreties' => sizeof($this->properties)]);
+            throw $exception;
+        }
+
+        if (!empty($gate)) {
+            $this->gate = $gate;
+        }
+
+        if (!empty($properties)) {
+            $this->properties = $properties;
+        }
+
+        if (!empty($userId)) {
+            $this->uid = $userId;
+        }
+
+        if (!empty($listId)) {
+            $this->lid = $listId;
+        }
+
+        $input = [];
+        $input['GateName'] = $this->gate;
+        $input['List'] = $this->lid;
+        $input['InputData'] = $this->properties;
+        $input['UserID'] = $this->uid;
+
+        $result = $this->call('TriggerCampaignForUser', $input);
+
+        $this->gate = '';
+        $this->lid = '';
+        $this->properties = [];
+        $this->uid = '';
+
+        if (isset($result->ErrorStr) && (!empty($result->ErrorStr))) {
+            $exception = new ErrorDataException('Selligent Error on Trigger mail for user');
+            $exception->setDatas(['List' => $this->lid, 'Datas' => $this->properties, 'Gate' => $this->gate, 'UserId' => $this->uid, 'NbrPropreties' => sizeof($this->properties)]);
+            throw $exception;
+        }
+
+        return $result;
+    }
 }
