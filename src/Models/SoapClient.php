@@ -302,7 +302,7 @@ class SoapClient
 
     public function triggerCampaignForUser($userId = null, $gate = null, $listId = null, $properties = [])
     {
-        if ((empty($gate) && empty($this->gate)) || (empty($properties) && empty($this->properties)) || (empty($userId) && empty($this->uid)) || (empty($listId) && empty($this->lid))) {
+        if ((empty($gate) && empty($this->gate)) || (empty($userId) && empty($this->uid)) || (empty($listId) && empty($this->lid))) {
             $exception = new ErrorDataException('Selligent Error on Trigger mail');
             $exception->setDatas(['List' => $this->lid, 'Datas' => $this->properties, 'Gate' => $this->gate, 'UserId' => $this->uid, 'NbrPropreties' => sizeof($this->properties)]);
             throw $exception;
@@ -313,7 +313,11 @@ class SoapClient
         }
 
         if (!empty($properties)) {
-            $this->properties = $properties;
+            foreach ($properties as $key => $value) {
+                $this->addProperty($key, $value);
+            }
+        } else {
+            $this->addProperty('', '');
         }
 
         if (!empty($userId)) {
