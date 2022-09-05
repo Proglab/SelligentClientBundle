@@ -1,6 +1,6 @@
 <?php
 
-namespace Proglab\SelligentClientBundle\DependencyInjection;
+namespace ShelfUtilities\SelligentClientBundle\DependencyInjection;
 
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Configuration;
 use Symfony\Component\Config\FileLocator;

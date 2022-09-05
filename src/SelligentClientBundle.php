@@ -1,6 +1,6 @@
 <?php
 
-namespace Proglab\SelligentClientBundle;
+namespace ShelfUtilities\SelligentClientBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

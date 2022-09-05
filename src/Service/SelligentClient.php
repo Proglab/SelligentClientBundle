@@ -1,15 +1,11 @@
 <?php
 
-namespace Proglab\SelligentClientBundle\Service;
+namespace ShelfUtilities\SelligentClientBundle\Service;
 
-use Proglab\SelligentClientBundle\Models\SoapClient;
+use ShelfUtilities\SelligentClientBundle\Models\SoapClient;
 
 class SelligentClient
 {
-    /**
-     * @var SelligentClient
-     */
-    private $selligent = null;
     private $soap_client = null;
 
     public function __construct(string $individual_url, string $broadcast_url, string $login, string $password)
@@ -19,7 +15,7 @@ class SelligentClient
 
     public function getSystemStatus()
     {
-        return $this->selligent->getSystemStatus();
+        return $this->soap_client->getSystemStatus();
     }
 
     public function getOneByFilter($filters, $listId)

@@ -1,6 +1,6 @@
 <?php
 
-namespace Proglab\SelligentClientBundle\Exception;
+namespace ShelfUtilities\SelligentClientBundle\Exception;
 
 use Throwable;
 
