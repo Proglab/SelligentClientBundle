@@ -1,5 +1,5 @@
 {
-    "name": "proglab/selligent-client-bundle",
+    "name": "shelf-utilities/selligent-client-bundle",
     "description": "Selligent Client Bundle",
     "type": "symfony-bundle",
     "authors": [
@@ -10,15 +10,14 @@
     ],
     "autoload": {
         "psr-4": {
-            "Proglab\\SelligentClientBundle\\": "src/"
+            "ShelfUtilities\\SelligentClientBundle\\": "src/"
         }
     },
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.1",
         "ext-soap": "*",
-        "ext-json": "*",
-        "symfony/framework-bundle": "^5.2",
-        "symfony/http-kernel": "^5.2"
+        "symfony/framework-bundle": "^6.1",
+        "symfony/http-kernel": "^6.1"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
@@ -33,6 +32,6 @@
         "cs:fix": "vendor/bin/php-cs-fixer fix --ansi",
         "phpstan": "vendor/bin/phpstan analyse --ansi"
     },
-    "license": "MIT",
-    "minimum-stability": "stable"
+    "license": "proprietary",
+    "minimum-stability": "dev"
 }

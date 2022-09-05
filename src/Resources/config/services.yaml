@@ -1,6 +1,6 @@
 services:
-  Proglab\SelligentClientBundle\Service\SelligentClient:
-    class: Proglab\SelligentClientBundle\Service\SelligentClient
+  ShelfUtilities\SelligentClientBundle\Service\SelligentClient:
+    class: ShelfUtilities\SelligentClientBundle\Service\SelligentClient
     arguments:
       $individual_url: '%env(APISELLIGENTCLIENT_INDIVIDUAL_URL)%'
       $broadcast_url: '%env(APISELLIGENTCLIENT_BROADCAST_URL)%'

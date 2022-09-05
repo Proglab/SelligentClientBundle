@@ -1,9 +1,9 @@
 <?php
 
-namespace Proglab\SelligentClientBundle\Models;
+namespace ShelfUtilities\SelligentClientBundle\Models;
 
 use Exception;
-use Proglab\SelligentClientBundle\Exception\ErrorDataException;
+use ShelfUtilities\SelligentClientBundle\Exception\ErrorDataException;
 use SoapClient as Soap;
 use SoapHeader;
 
@@ -250,11 +250,10 @@ class SoapClient
     public function getSystemStatus()
     {
         $result = $this->call('GetSystemStatus', null);
-
-        if (isset($result->GetSystemStatusResult)) {
+        if (isset($result->GetSystemStatusResult) && !empty($result->GetSystemStatusResult) && empty($result->ErrorStr)) {
             return $result->GetSystemStatusResult;
         } else {
-            return 'unable to retrieve status';
+            throw new Exception('Could not GetSystemStatus : '.$result->ErrorStr, 500);
         }
     }
 
